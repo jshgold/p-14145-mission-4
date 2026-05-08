@@ -25,10 +25,7 @@ public class WiseSayingService {
 
     public Map<Integer, WiseSaying> getList(String type, String keyword) {
         Map<Integer, WiseSaying> map = repo.findAll();
-        if("author".equals(type)) return filterByAuthor(map, keyword);
-        else if("content".equals(type)) return filterByContent(map, keyword);
-        else if("".equals(type) && !keyword.isEmpty()) return filterByKeyword(map, keyword);
-        return map;
+        return search(map, type, keyword);
     }
 
     public void update(int targetId, String content, String author) {
@@ -50,6 +47,13 @@ public class WiseSayingService {
         WiseSaying ws = repo.delete(targetId);
         if(ws == null) return false;
         return true;
+    }
+
+    private Map<Integer,WiseSaying> search(Map<Integer,WiseSaying> map, String type, String keyword){
+        if("author".equals(type)) return filterByAuthor(map, keyword);
+        else if("content".equals(type)) return filterByContent(map, keyword);
+        else if("".equals(type) && !keyword.isEmpty()) return filterByKeyword(map, keyword);
+        return map;
     }
 
     private Map<Integer,WiseSaying> filterByContent(Map<Integer, WiseSaying> map, String keyword) {

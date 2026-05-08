@@ -41,8 +41,9 @@ public class App {
                 case "list" -> {
                     String type = rq.getValue("keywordType","");
                     String keyword = rq.getValue("keyword","");
+                    int page = rq.getIntValue("page",-1);
                     if(!type.isEmpty() && keyword.isEmpty()) System.out.println("검색을 하시려면 타입과 키워드를 입력하시거나 키워드만 입력해주세요");
-                    else controller.requestShowList(type, keyword);
+                    else controller.requestShowList(type, keyword, page);
                 }
                 case "edit" -> {
                     int id = rq.getIntValue("id",-1);

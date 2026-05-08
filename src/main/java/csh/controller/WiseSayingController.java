@@ -3,8 +3,11 @@ package csh.controller;
 import csh.entity.WiseSaying;
 import csh.service.WiseSayingService;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class WiseSayingController {
     private final WiseSayingService service = new WiseSayingService();
@@ -22,7 +25,8 @@ public class WiseSayingController {
         System.out.println("%d번 명언이 등록되었습니다.".formatted(id));
     }
 
-    public void requestShowList(String type, String keyword) {
+    public void requestShowList(String type, String keyword, int page) {
+        int p = Math.abs(page);
         boolean typeFlag = !type.isEmpty();
         boolean keywordFlag = !keyword.isEmpty();
         if(typeFlag || keywordFlag) System.out.println("----------------------");
@@ -32,9 +36,18 @@ public class WiseSayingController {
         Map<Integer, WiseSaying> map = service.getList(type,keyword);
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
-        for(WiseSaying ws : map.values()) {
-            System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
+        Collection<WiseSaying> a = map.values();
+        WiseSaying[] wsArr = a.toArray(new WiseSaying[0]);
+        int start = (p-1) * 5;
+        for(int i=start; i<wsArr.length; i++) {
+            if(i - start == 5) break;
+            System.out.println(wsArr[i].getId() + " / " + wsArr[i].getAuthor() + " / " + wsArr[i].getContent());
         }
+        int size = 0;
+        if(wsArr.length % 5 != 0 || wsArr.length == 0) size = wsArr.length / 5 + 1;
+        else size = wsArr.length / 5;
+
+        System.out.println("페이지 : [%d] / [%d]".formatted(p, size));
     }
 
     public void requestUpdate(int id) {
