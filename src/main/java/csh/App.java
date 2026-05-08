@@ -38,7 +38,12 @@ public class App {
                     return;
                 }
                 case "create" -> controller.requestCreate();
-                case "list" -> controller.requestShowList();
+                case "list" -> {
+                    String type = rq.getValue("keywordType","");
+                    String keyword = rq.getValue("keyword","");
+                    if(!type.isEmpty() && keyword.isEmpty()) System.out.println("검색을 하시려면 타입과 키워드를 입력하시거나 키워드만 입력해주세요");
+                    else controller.requestShowList(type, keyword);
+                }
                 case "edit" -> {
                     int id = rq.getIntValue("id",-1);
                     controller.requestUpdate(id);

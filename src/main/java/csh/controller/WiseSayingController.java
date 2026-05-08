@@ -22,8 +22,14 @@ public class WiseSayingController {
         System.out.println("%d번 명언이 등록되었습니다.".formatted(id));
     }
 
-    public void requestShowList() {
-        Map<Integer, WiseSaying> map = service.getList();
+    public void requestShowList(String type, String keyword) {
+        boolean typeFlag = !type.isEmpty();
+        boolean keywordFlag = !keyword.isEmpty();
+        if(typeFlag || keywordFlag) System.out.println("----------------------");
+        if(typeFlag) System.out.println("검색타입 : %s".formatted(type));
+        if(keywordFlag) System.out.println("검색어 : %s".formatted(keyword));
+        if(typeFlag || keywordFlag) System.out.println("----------------------");
+        Map<Integer, WiseSaying> map = service.getList(type,keyword);
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
         for(WiseSaying ws : map.values()) {
