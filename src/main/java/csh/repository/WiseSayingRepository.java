@@ -23,7 +23,7 @@ public class WiseSayingRepository {
         save(wiseSaying);
     }
 
-    public void delete(int id) {
-        map.remove(id);
+    public WiseSaying delete(int id) {
+        return map.remove(id);
     }
 }

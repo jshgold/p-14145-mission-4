@@ -43,7 +43,9 @@ public class WiseSayingService {
         return ws;
     }
 
-    public void deleteWiseSayingById(int targetId) {
-        repo.delete(targetId);
+    public boolean deleteWiseSayingById(int targetId) {
+        WiseSaying ws = repo.delete(targetId);
+        if(ws == null) return false;
+        return true;
     }
 }

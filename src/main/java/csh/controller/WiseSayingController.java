@@ -33,7 +33,10 @@ public class WiseSayingController {
 
     public void requestUpdate(int id) {
         WiseSaying ws = service.getWiseSayingById(id);
-        if(ws == null) return;
+        if(ws == null) {
+            System.out.println("해당 명언은 존재 하지않습니다.");
+            return;
+        }
         System.out.println("명언(기존) : %s".formatted(ws.getContent()));
         System.out.print("명언 : ");
         String content = sc.nextLine().trim();
@@ -45,9 +48,8 @@ public class WiseSayingController {
     }
 
     public void requestDelete(int id) {
-        service.deleteWiseSayingById(id);
-        System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
-//        if(flag) System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
-//        else System.out.println("%d번 명언은 존재하지않습니다.".formatted(id));
+        boolean flag = service.deleteWiseSayingById(id);
+        if(flag) System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
+        else System.out.println("해당 명언은 존재하지않습니다.");
     }
 }
