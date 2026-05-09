@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 public class WiseSayingController {
     private final WiseSayingService service = new WiseSayingService();
     private final Scanner sc;
+    private static final int PAGE_LIMIT = 5;
     public WiseSayingController(Scanner scanner) {
         sc = scanner;
     }
@@ -26,28 +27,33 @@ public class WiseSayingController {
     }
 
     public void requestShowList(String type, String keyword, int page) {
-        int p = Math.abs(page);
+        page = Math.abs(page);
         boolean typeFlag = !type.isEmpty();
         boolean keywordFlag = !keyword.isEmpty();
+
         if(typeFlag || keywordFlag) System.out.println("----------------------");
         if(typeFlag) System.out.println("검색타입 : %s".formatted(type));
         if(keywordFlag) System.out.println("검색어 : %s".formatted(keyword));
         if(typeFlag || keywordFlag) System.out.println("----------------------");
+
         Map<Integer, WiseSaying> map = service.getList(type,keyword);
+
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
-        Collection<WiseSaying> a = map.values();
-        WiseSaying[] wsArr = a.toArray(new WiseSaying[0]);
-        int start = (p-1) * 5;
-        for(int i=start; i<wsArr.length; i++) {
-            if(i - start == 5) break;
-            System.out.println(wsArr[i].getId() + " / " + wsArr[i].getAuthor() + " / " + wsArr[i].getContent());
-        }
-        int size = 0;
-        if(wsArr.length % 5 != 0 || wsArr.length == 0) size = wsArr.length / 5 + 1;
-        else size = wsArr.length / 5;
+        WiseSaying[] wiseSayings = map.values().toArray(new WiseSaying[0]);
+        int length = wiseSayings.length;
+        int start = (page-1) * PAGE_LIMIT;
+        int end = page * PAGE_LIMIT ;
+        if(end > length) end = length;
 
-        System.out.println("페이지 : [%d] / [%d]".formatted(p, size));
+        for(int i=start; i<end; i++) {
+            System.out.println(wiseSayings[i].getId() + " / " + wiseSayings[i].getAuthor() + " / " + wiseSayings[i].getContent());
+        }
+
+        int size = 0;
+        if(length % PAGE_LIMIT != 0 || length == 0) size = length / PAGE_LIMIT + 1;
+        else size = length / 5;
+        System.out.println("페이지 : [%d] / [%d]".formatted(page, size));
     }
 
     public void requestUpdate(int id) {
